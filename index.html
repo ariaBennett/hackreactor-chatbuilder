@@ -31,16 +31,25 @@
       Chat.guide.start();
 
       //Your JavaScript code will go right here!
-      Chat.updateChat = function() {
+      Chat.update = function() {
         Chat.fetch(function(messages) {
           $.each(messages, function(message) {
             console.log(messages[message]);
           });
         });
       };
-      Chat.updateChat.continuous = function() {
-        setInterval(Chat.updateChat, 1000);
+      Chat.update.continuous = function() {
+        setInterval(Chat.update, 1000);
       };
+      Chat.checkForInput = function() {
+        if ( ($(".draft").val()) ) {
+          ($(".send")).removeAttr("disabled");
+        }
+        else if (!($(".send")).attr("disabled")) {
+          ($(".send").attr("disabled", "disabled"));
+        }
+      };
+      setInterval(Chat.checkForInput, 16);
     </script>
 
 
