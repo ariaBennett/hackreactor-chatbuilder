@@ -45,9 +45,14 @@
       //remove helpers
       delete Chat.display;
       delete Chat.fetch;
+      delete Chat.send;
       //functions
       Chat.display = function(message) {
         $(".messages").append("<li>" + message + "</li>")
+      };
+      Chat.send = function(message) {
+        var stringifiedMessage = '{"text":"' + message + '"}' ;
+        $.post( "https://api.parse.com/1/classes/chats", stringifiedMessage );
       };
       Chat.fetch = function(callback) {
         jQuery.get("https://api.parse.com/1/classes/chats?order=-createdAt")
