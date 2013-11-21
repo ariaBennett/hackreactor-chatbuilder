@@ -13,9 +13,7 @@
 
     <ul class="messages">
       <!-- once you save this code to a local `.html()` file, you can delete these 3 fake, hard-coded li elements -->
-      <li>Mysterious_guide: Hey there! Let's build a chat application.</li>
-      <li>Mysterious_guide: Right now, there's actually no functionality in this chat client--it's just an inert page full of pre-written HTML that's being rendered by your browser.
-      <li>Mysterious_guide: But you can fix that--try looking at the page source to see how this page works.</li>
+
     </ul>
 
     <script>
@@ -44,7 +42,23 @@
       Chat.guide.start();
 
       //Your JavaScript code will go right here!
+      //remove helpers
+      delete Chat.display;
+      delete Chat.fetch;
       //functions
+      Chat.display = function(message) {
+        $(".messages").append("<li>" + message + "</li>")
+      };
+      Chat.fetch = function(callback) {
+        jQuery.get("https://api.parse.com/1/classes/chats?order=-createdAt")
+        .done(function(data) {
+          var messages = [];
+          for (var i = 0; i < data.results.length; i++) {
+            messages.push(data.results[i].text);
+          }
+          callback(messages);
+        });
+      };
       Chat.update = function() {
         var oldMessages = $("li");
         oldMessages.remove();
@@ -74,7 +88,9 @@
       var sendButton = $(".send");
       sendButton.click(function() {
         userInput = $(".draft");
-        Chat.send(userInput.val());
+        if (userInput.val()) {  //ensure a blank message didn't slip through
+          Chat.send(userInput.val());
+        }
         userInput.val(""); 
       });
       
